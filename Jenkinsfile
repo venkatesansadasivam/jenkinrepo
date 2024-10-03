@@ -9,11 +9,23 @@ pipeline {
              git url: "https://github.com/venkatesansadasivam/webapp-project.git" , branch: 'main'
            }
         }
-        stage("build") {
-            steps {
-                sh 'mvn clean install'
-            }
+        stage("bulid") {
+           steps {
+             sh 'mvn clean deploy'
+           }
         }
-       }
-} 
+        stage("sonarqube analysis") {
+          environment {
+                 scanner_Home = 'saidemy-sonarqube-scnner'
+          }
+          steps {
+                withSonarQubeEnv('saidemy-sonarqube-server') {
+                 sh "${scannerHome}/bin/sonar-scanner"
+                 }
+           }
+         }
+
+        }
+        }
+   
 		
