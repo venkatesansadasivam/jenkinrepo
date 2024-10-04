@@ -4,8 +4,14 @@ pipeline {
         PATH = "/opt/maven/bin:$PATH"         
     }                                         
 
-    stages {                                  
-        
+    stages {
+         stage('git clone') {
+            steps {
+                git url: 'https://github.com/SaiDevOpsFaculty/war-web-project.git', branch: 'master'
+
+            }
+        }
+                               
         stage("build") {                      
             steps {                          
                 echo "----------- build started ----------"  
