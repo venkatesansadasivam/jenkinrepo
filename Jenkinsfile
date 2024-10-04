@@ -1,53 +1,19 @@
-pipeline {                                    
-    agent any                                 
+pipeline {                                   
+    agent any                                
     environment {                             
         PATH = "/opt/maven/bin:$PATH"         
     }                                         
-
-    stages {
-         stage('git clone') {
-            steps {
-                git url: 'https://github.com/SaiDevOpsFaculty/war-web-project.git', branch: 'master'
-
-            }
-        }
-                               
-        stage("build") {                      
-            steps {                          
-                echo "----------- build started ----------"  
-                                              
-                sh 'mvn clean deploy -Dmaven.test.skip=true'  
+    stages {                                  
+        stage('git clone') {                 
+            steps {                           
+                git url: 'https://github.com/SaiDevOpsFaculty/war-web-project.git', branch: 'master'  
                                              
-                echo "----------- build completed ----------"  
-                                              
-            }                                
-        }                                     
-        stage("test") {                       
-            steps {                           
-                echo "----------- unit test started ----------"  
-                                              
-                sh 'mvn surefire-report:report'  
-                                              
-                echo "----------- unit test completed ----------"  
-                                              
-            }                                
-        }                                     
-
-        stage('SonarQube analysis') {         
-            environment {                    
-                scannerHome = tool 'saidemy-sonar-scanner'
-
-                                           
-            }                                 
-
-            steps {                           
-                withSonarQubeEnv('saidemy-sonarqube-server') {
-                                              
-                    sh "${scannerHome}/bin/sonar-scanner"  
-                                              
-                }                             
             }                                 
         }                                     
-      }
-     }
-  }
+        stage('build') {                      
+            steps {                           
+                sh 'mvn clean install'        
+            }                                 
+        }                                     
+    }                                         
+}
